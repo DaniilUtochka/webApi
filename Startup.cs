@@ -37,13 +37,9 @@ namespace webApiNew3
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            app.UseMiddleware<TokenMiddleware>();
             app.UseHttpsRedirection();
-
             app.UseRouting();
-
-            app.UseAuthorization();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

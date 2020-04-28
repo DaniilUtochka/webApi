@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using webApiNew3.Models;
 
 namespace webApiNew3.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200428195312_AddToken")]
+    partial class AddToken
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -98,7 +100,10 @@ namespace webApiNew3.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("accountId")
+                    b.Property<long>("accountId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int?>("accountId1")
                         .HasColumnType("int");
 
                     b.Property<int>("expiredIn")
@@ -110,7 +115,7 @@ namespace webApiNew3.Migrations
 
                     b.HasKey("tokenId");
 
-                    b.HasIndex("accountId");
+                    b.HasIndex("accountId1");
 
                     b.ToTable("Token");
                 });
@@ -137,7 +142,7 @@ namespace webApiNew3.Migrations
                 {
                     b.HasOne("webApiNew3.Models.Account", "Account")
                         .WithMany()
-                        .HasForeignKey("accountId");
+                        .HasForeignKey("accountId1");
                 });
 #pragma warning restore 612, 618
         }

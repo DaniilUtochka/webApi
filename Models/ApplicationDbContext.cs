@@ -12,6 +12,7 @@ namespace webApiNew3.Models
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Address> Addresses { get; set; }
         public DbSet<Account> Account { get; set; }
+        public DbSet<Token> Token { get; set; }
     }
 
 }

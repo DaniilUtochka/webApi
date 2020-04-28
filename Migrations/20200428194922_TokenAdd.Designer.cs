@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using webApiNew3.Models;
 
 namespace webApiNew3.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200428194922_TokenAdd")]
+    partial class TokenAdd
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -91,30 +93,6 @@ namespace webApiNew3.Migrations
                     b.ToTable("Customers");
                 });
 
-            modelBuilder.Entity("webApiNew3.Models.Token", b =>
-                {
-                    b.Property<long>("tokenId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("accountId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("expiredIn")
-                        .HasColumnType("int");
-
-                    b.Property<string>("token")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("tokenId");
-
-                    b.HasIndex("accountId");
-
-                    b.ToTable("Token");
-                });
-
             modelBuilder.Entity("webApiNew3.Models.Account", b =>
                 {
                     b.HasOne("webApiNew3.Models.Customer", "Customer")
@@ -131,13 +109,6 @@ namespace webApiNew3.Migrations
                         .HasForeignKey("customerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("webApiNew3.Models.Token", b =>
-                {
-                    b.HasOne("webApiNew3.Models.Account", "Account")
-                        .WithMany()
-                        .HasForeignKey("accountId");
                 });
 #pragma warning restore 612, 618
         }

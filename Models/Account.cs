@@ -13,5 +13,6 @@ namespace webApiNew3.Models
         public string login { get; set; }
         public string password { get; set; }
         public Customer Customer { get; set; }
+        [NotMapped][JsonIgnore] public Token Token { get; set; }
     }
 }

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using webApiNew3.Models;
 
 namespace webApiNew3.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200428195434_TokenUpdate")]
+    partial class TokenUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -98,8 +100,8 @@ namespace webApiNew3.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("accountId")
-                        .HasColumnType("int");
+                    b.Property<long>("accountId")
+                        .HasColumnType("bigint");
 
                     b.Property<int>("expiredIn")
                         .HasColumnType("int");
@@ -109,8 +111,6 @@ namespace webApiNew3.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("tokenId");
-
-                    b.HasIndex("accountId");
 
                     b.ToTable("Token");
                 });
@@ -131,13 +131,6 @@ namespace webApiNew3.Migrations
                         .HasForeignKey("customerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("webApiNew3.Models.Token", b =>
-                {
-                    b.HasOne("webApiNew3.Models.Account", "Account")
-                        .WithMany()
-                        .HasForeignKey("accountId");
                 });
 #pragma warning restore 612, 618
         }

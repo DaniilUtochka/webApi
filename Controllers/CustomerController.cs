@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Logging;
+using Microsoft.VisualBasic;
 using webApiNew3.Models;
 
 namespace webApiNew3.Controllers
@@ -42,6 +43,7 @@ namespace webApiNew3.Controllers
                 Where(c => c.customerId == id)
                 .Include(c => c.Address)
                 .FirstOrDefault();
+            Console.WriteLine("GET: customer/{0}/info - Вызов выполнен успешно", id.ToString());
             return Ok(customer);
         }
 
