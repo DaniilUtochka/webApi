@@ -7,7 +7,7 @@ using webApiNew3.Models;
 namespace webApiNew3.Controllers
 {
     [ApiController]
-    [Route("[Controller]")]
+    [Route("api/[Controller]")]
     public class AccountController: ControllerBase
     {
         private readonly ApplicationDbContext _db;

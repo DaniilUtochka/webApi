@@ -9,8 +9,9 @@ namespace webApiNew3.Models
     {
         [Key] [Required] public Int64 tokenId { get; set; }
         [Required] public string token { get; set; }
-        [Required] public DataType expiredIn { get; set; }
+        [Required] public DateTime expiredIn { get; set; }
+        public int ?accountId { get; set; }
 
-        [JsonIgnore]public Account Account { get; set; }
+        public Account Account { get; set; }
     }
 }

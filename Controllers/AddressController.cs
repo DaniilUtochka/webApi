@@ -7,7 +7,7 @@ using webApiNew3.Models;
 namespace webApiNew3.Controllers
 {
     [ApiController]
-    [Microsoft.AspNetCore.Mvc.Route("[controller]")]
+    [Microsoft.AspNetCore.Mvc.Route("api/[controller]")]
     public class AddressController: ControllerBase
     {
         private readonly ApplicationDbContext _db;

@@ -12,7 +12,7 @@ using webApiNew3.Models;
 namespace webApiNew3.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class CustomerController : ControllerBase
     {
         private readonly ApplicationDbContext _db;
@@ -25,8 +25,7 @@ namespace webApiNew3.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<Customer>> Get()
         {
-            List<Customer> Customers = _db.Customers.ToList();
-            return ListToSet(Customers);
+            return _db.Customers.ToList();
         }
 
         [HttpGet("{id}")]
@@ -72,16 +71,5 @@ namespace webApiNew3.Controllers
             return Ok();
         }
 
-        internal HashSet<T> ListToSet<T>(List<T> list)
-        {
-            HashSet<T> set = new HashSet<T>();
-            foreach (var element in list)
-            {
-                set.Add(element);
-            }
-            Console.WriteLine(set.Count);
-            return set;
-        }
-        
     }
 }
