@@ -39,8 +39,10 @@ namespace webApiNew3
                 app.UseDeveloperExceptionPage();
             }
             
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
+
             app.UseMiddleware<TokenMiddleware>();
-            
             app.UseHttpsRedirection();
             app.UseRouting();
 

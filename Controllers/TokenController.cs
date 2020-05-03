@@ -26,36 +26,41 @@ namespace webApiNew3.Controllers
         [HttpGet]
         public async Task<ActionResult<Token>> get([FromQuery] int? accountId)
         {
-            if (accountId == null) return StatusCode(400);
+            if (accountId == null) return BadRequest();
             
-            // Запрашивается токен по аккаунту
-            List<Token> tokenList = _db.Token.Where(t => t.accountId == accountId).ToList();
+            // Get token by account id
+            Token token = _db.Token.Where(t => t.accountId == accountId).FirstOrDefault();
                 
-            //Если токена для этого аккаунта нет, то генерится новый записывается
-            if (tokenList.Count == 0)
+            // Create token, if returns nothing
+            if (token == null)
             {
-                Token token = CreateToken(accountId);
-                Task.Run(() => AddTokenToCookie(token));
-                return Ok(token);
+                Token tokenNew = CreateToken(accountId); // Token generated and saved to db
+                Task.Run(() => AddTokenToCookie(tokenNew)); // Token Saved to cookie
+                return Ok(tokenNew);
             }
-            //Если токен по этому аккакунту есть, но он пропал, то обноляется токен в БД и в Куки.
-            //Аналогично если токен просто есть. Тогда он просто обновляется в БД и Куки.
+            // If token expited, refresh and save to DB and cookie
+            // Same if token exists and still actual
             else
             {
-                UpdateToken(tokenList[0], accountId);
-                Task task = Task.Run(() => this.UpdateTokenToCookie(tokenList[0]));
-                return Ok(tokenList[0]);
+                UpdateToken(token, accountId);
+                Task task = Task.Run(() => this.UpdateTokenToCookie(token));
+                return Ok(token);
             }
         }
 
+        // Отдельно сделать генерацию токена, отдельно сохранение
+        // Requets from account controller after success authorisation
         public Token CreateToken(int? accountId)
         {
+            // Create token
             Token token = new Token()
             {
                 token = DateTime.Now.GetHashCode().ToString(),
                 expiredIn = DateTime.Now.AddMinutes(5),
                 accountId = accountId
             };
+            
+            // Save token to DB -> to new method
             _db.Token.Add(token);
             _db.SaveChanges();
 
@@ -72,9 +77,9 @@ namespace webApiNew3.Controllers
         // Метод для проверки валидоности и актуальности токена. Вызыавется из MiddleWare
         public Boolean CheckToken(String token)
         {
-            Console.WriteLine("Выполянется проверка токена на наличие и пригодность");
-            List<Token> tokenInDb = _db.Token.Where(t => t.token == token).ToList();
-            if (tokenInDb.Count() == 0 || tokenInDb[0].expiredIn <= DateTime.Now) return false;
+            Console.WriteLine("TokenController.CheckToken: Выполянется проверка токена на валидность");
+            Token tokenInDb = _db.Token.Where(t => t.token == token).FirstOrDefault();
+            if (tokenInDb == null || tokenInDb.expiredIn <= DateTime.Now) return false;
             else return true;
         }
 
@@ -90,5 +95,5 @@ namespace webApiNew3.Controllers
             Response.Cookies.Delete("token");
             Response.Cookies.Append("token", token.token, options);
         }
-}
+    }
 }

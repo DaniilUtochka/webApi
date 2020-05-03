@@ -23,7 +23,7 @@ namespace webApiNew3
 
         public async Task InvokeAsync(HttpContext context, ApplicationDbContext applicationContext)
         {
-            if (context.Request.Path.ToString().Contains("/token"))
+            if (context.Request.Path.ToString().Contains("/token") || context.Request.Path.ToString().Contains("api/account/auth"))
             {
                 Console.WriteLine("Requested \"GET: /token\"");
                 await _next.Invoke(context);
@@ -38,18 +38,20 @@ namespace webApiNew3
                 if (tokenInCookies == null)
                 {
                     
-                    await context.Response.WriteAsync("No access, get token before request - GET: /token?accountId = *");
+                    await context.Response.WriteAsync("TokenMiddlware: No access, get token before request - GET: /token?accountId = *");
                 }
                 else
                 {
+                    // Проверка, если токен есть и он не прорпал, то допускаем пользователя
                     if (new TokenController(applicationContext).CheckToken(tokenInCookies))
                     {
-                        Console.WriteLine("Проверка токена выолнена успешно, вызов с токеном: {0}", tokenInCookies);
+                        Console.WriteLine("TokenMiddlware: Проверка токена выолнена успешно, вызов с токеном: {0}", tokenInCookies);
                         await _next.Invoke(context);
                     }
+                    // Если токен невалиден 
                     else
                     {
-                        Console.WriteLine("Токен {0} не найден или истек его срок действия", tokenInCookies);
+                        Console.WriteLine("TokenMiddlware: Токен {0} не найден или истек его срок действия", tokenInCookies);
                         await context.Response.WriteAsync("Your token expired, get new sing - GET: /token?accountId = *");
                     }
                 }
