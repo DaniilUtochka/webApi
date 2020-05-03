@@ -1,11 +1,6 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
 using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
-using Microsoft.Net.Http.Headers;
-using Microsoft.VisualBasic;
 using webApiNew3.Controllers;
 using webApiNew3.Models;
 
@@ -23,7 +18,8 @@ namespace webApiNew3
 
         public async Task InvokeAsync(HttpContext context, ApplicationDbContext applicationContext)
         {
-            if (context.Request.Path.ToString().Contains("/token") || context.Request.Path.ToString().Contains("api/account/auth"))
+            string path = context.Request.Path.Value.ToLower();
+            if (path == "/token" || path == "/api/account/auth")
             {
                 Console.WriteLine("Requested \"GET: /token\"");
                 await _next.Invoke(context);
@@ -56,8 +52,6 @@ namespace webApiNew3
                     }
                 }
             }
-
         }
-
     }
 }
